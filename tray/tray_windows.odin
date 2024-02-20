@@ -89,7 +89,7 @@ tray_wnd_proc :: proc "std" (
 tray_menu :: proc(menus: []Tray_Menu, id: ^windows.UINT) -> windows.HMENU {
 	popup_hmenu := windows.CreatePopupMenu()
 
-	for menu, menu_idx in menus {
+	for &menu in menus {
 		if menu.text == "-" {
 			windows.InsertMenuW(
 				popup_hmenu,
@@ -123,7 +123,7 @@ tray_menu :: proc(menus: []Tray_Menu, id: ^windows.UINT) -> windows.HMENU {
 				context.temp_allocator,
 			)
 			item.dwTypeData = menu_text_wcstr
-			item.dwItemData = transmute(windows.ULONG_PTR)(&menus[menu_idx])
+			item.dwItemData = transmute(windows.ULONG_PTR)(&menu)
 
 			windows.InsertMenuItemW(popup_hmenu, id^, windows.TRUE, &item)
 		}
